@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h1>ichimon-ittou-bot</h1>
+    <form method="get" action="url" id="form">
+      <label for="type">type</label>
+      <input type="text" id="type" name="type" placeholder='"upload" or something' value="upload">
+      <label for="sheet_number">sheet number</label>
+      <input type="number" id="sheet_number" name="sheet_number" placeholder="optional">
+      <input type="submit" value="GO">
+    </form>
+    <script>
+      const setUrl = url => document.getElementById("form").action = url;
+      google.script.run.withSuccessHandler(setUrl).getMyUrl();
+    </script>
+  </body>
+</html>
