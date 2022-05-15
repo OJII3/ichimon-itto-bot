@@ -3,4 +3,4 @@ A LINE bot that help you learn English words.
 
 It is operated by Google Apps Script.
 
-You need to make word list in spreadsheets.
+There are some spreadsheets to make word list.
