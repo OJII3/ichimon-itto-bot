@@ -166,7 +166,7 @@ const setQuestionMessage = () => {
         {
           flex: 0,
           type: "text",
-          text: Qn + " ",
+          text: `${Qn} `,
           size: "xs",
           weight: "bold",
           gravity: "center",
@@ -191,7 +191,7 @@ const setQuestionMessage = () => {
   if (Qu) {
     container.body.contents[1].contents.push({
       type: "text",
-      text: Qu.replace(/\\n/g, "\n"),
+      text: ` ${Qu.replace(/\\n/g, "\n")}`,
       size: FontSize,
       wrap: true,
       color: FontColor1,
