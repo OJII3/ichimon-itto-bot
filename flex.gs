@@ -1,3 +1,4 @@
+
 const bubbleSize = "mega";
 
 const searchBox = text => `https://www.google.com/search?q=${text.replace(/\s|　|\\n/g, "%20").replace(/≒|cf\./g, "")}`;
@@ -240,6 +241,7 @@ const setQuestionMessage = () => {
 
 const setAnswerMessage = () => {
   An = !An || An === "" ? "解答データがありません" : An;
+  Aa1 = Aa1 ? ` [${Aa1}]` : "";
   const container = {
     type: "bubble",
     size: bubbleSize,
@@ -250,7 +252,7 @@ const setAnswerMessage = () => {
       paddingAll: "xl",
       contents: [{
         type: "text",
-        text: Tf + " " + An.replace(/\{|\}/g, "").replace(/\\n/g, "\n"),
+        text: `${Tf} ${An.replace(/\{|\}/g, "").replace(/\\n/g, "\n")}${Aa1.replace(/\{|\}/g, '').replace(/\\n/g, '\n')}`,
         size: FontSize,
         color: "#ff0055",
         wrap: true,
@@ -263,17 +265,31 @@ const setAnswerMessage = () => {
     }
   };
 
-  if (Aa) {
+  if (Aa2) {
     container.body.contents.push({
       type: "text",
-      text: Aa.replace(/\{|\}/g, "").replace(/\\n/g, "\n"),
+      text: Aa2.replace(/\\n/g, "\n"),
       size: "sm",
       wrap: true,
       color: FontColor1,
       action: {
         type: "postback",
         data: "@Back",
-        displayText: searchBox(Aa.replace(/\{|\}/g, ""))
+        displayText: searchBox(Aa2)
+      }
+    });
+  }
+  if (Ae) {
+    container.body.contents.push({
+      type: "text",
+      text: Ae.replace(/\\n/g, "\n"),
+      size: "sm",
+      wrap: true,
+      color: FontColor1,
+      action: {
+        type: "postback",
+        data: "@Back",
+        displayText: searchBox(Aa2)
       }
     });
   }
@@ -527,7 +543,7 @@ const setDescriptionMessage = description => {
   setFlexMessage(description.replace(/\\n/g, " "), container);
 };
 
-const setResetMessage = (tfCount, fullCount) => {
+const setResetMessage = (tfCount, fullCount, currentFileName) => {
   const contents = {
     type: "flex",
     altText: "正誤記録をリセットしますか？",
@@ -551,6 +567,12 @@ const setResetMessage = (tfCount, fullCount) => {
         spacing: "sm",
         backgroundColor: BgColor,
         contents: [
+          {
+            type: "text",
+            text: currentFileName,
+            color: FontColor1,
+            size: "sm"
+          },
           {
             type: "text",
             text: "正誤記録をリセットしますか？",
