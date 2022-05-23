@@ -129,7 +129,7 @@ const checkTf = (currentIndex, userIndex) => {
   const answers = [
     An.replace(/\{|\}.*?\[.*?\]/g, ''),
     An.replace(/\{.*?\}\[|\]/g, ''),
-    ...(Aa1.match(/^.*?\/|\/.*?\/|\/.*?$|^.*$/g, '').map(elem => elem.replace(/^\/|\/$/g, '')) || "")
+    ...(Aa1.match(/^.*?\/|\/.*?\/|\/.*?$|^.*$/g, '') || []).map(elem => elem.replace(/^\/|\/$/g, ''))
   ];
   
   for (const answer of answers) {
