@@ -143,7 +143,8 @@ const checkTf = (currentIndex, userIndex) => {
       .replace(/₄/g,"4")
       .replace(/₅/g,"5")
       .replace(/₆/g,"6");
-    const userProccessedAnswer = Umsg.match(/^[のをとがに]$|^[\s|　|～|〜|~|…|\.\.\.]*$/) ? 
+    const userProccessedAnswer = Umsg.match(/^[のをとがに]$|^[\s|　|～|〜|~|…|\.\.\.]*$/) ?
+      Umsg :
       Umsg
         .replace(/\s|　|～|〜|~|…|\.\.\./g, '')
         .replace(/‘|’/g,"'")
@@ -154,8 +155,7 @@ const checkTf = (currentIndex, userIndex) => {
         .replace(/₄/g,"4")
         .replace(/₅/g,"5")
         .replace(/₆/g,"6")
-        .replace(/^の|^を|^と|^が|^に/, '') :
-      Umsg;
+        .replace(/^の|^を|^と|^が|^に/, '');
       
     if (processedAnswer.replace(/\(|\)/g, '').replace(/^の|^を|^と|^が|^に/, '') === userProccessedAnswer) {
       Tf = '⭕️';
