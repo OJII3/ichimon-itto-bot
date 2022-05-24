@@ -127,14 +127,14 @@ const checkTf = (currentIndex, userIndex) => {
 
   Tf = "❌";
   const answers = [
-    An.replace(/\{|\}.*?\[.*?\]/g, ''),
-    An.replace(/\{.*?\}\[|\]/g, ''),
-    ...(Aa1.match(/^.*?\/|\/.*?\/|\/.*?$|^.*$/g, '') || []).map(elem => elem.replace(/^\/|\/$/g, ''))
+    An.replace(/\{|\} ?\[.*?\]/g, ''),
+    An.replace(/\{.*?\} ?\[|\]/g, ''),
+    ...(Aa1.match(/^.*?\/|\/.*?\/|\/.*?$|^.*$/g, '') || ['@Pass']).map(elem => elem.replace(/^\/|\/$/g, ''))
   ];
   
   for (const answer of answers) {
     const processedAnswer = answer
-      .replace(/\s|　|〜|~|…|\.\.\./g, '')
+      .replace(/\s|　|～|〜|~|…|\.\.\./g, '')
       .replace(/‘|’/g,"'")
       .replace(/“|”/g,'"')
       .replace(/\\n/g,"")
@@ -143,18 +143,20 @@ const checkTf = (currentIndex, userIndex) => {
       .replace(/₄/g,"4")
       .replace(/₅/g,"5")
       .replace(/₆/g,"6");
-    const userProccessedAnswer = Umsg
-      .replace(/\s|　|〜|~|…|\.\.\./g, '')
-      .replace(/‘|’/g,"'")
-      .replace(/“|”/g,'"')
-      .replace(/\\n/g,"")
-      .replace(/₂/g,"2")
-      .replace(/₃/g,"3")
-      .replace(/₄/g,"4")
-      .replace(/₅/g,"5")
-      .replace(/₆/g,"6")
-      .replace(/^の|^を|^と|^が|^に/, '');
-
+    const userProccessedAnswer = Umsg.match(/^[のをとがに]$|^[\s|　|～|〜|~|…|\.\.\.]*$/) ? 
+      Umsg
+        .replace(/\s|　|～|〜|~|…|\.\.\./g, '')
+        .replace(/‘|’/g,"'")
+        .replace(/“|”/g,'"')
+        .replace(/\\n/g,"")
+        .replace(/₂/g,"2")
+        .replace(/₃/g,"3")
+        .replace(/₄/g,"4")
+        .replace(/₅/g,"5")
+        .replace(/₆/g,"6")
+        .replace(/^の|^を|^と|^が|^に/, '') :
+      Umsg;
+      
     if (processedAnswer.replace(/\(|\)/g, '').replace(/^の|^を|^と|^が|^に/, '') === userProccessedAnswer) {
       Tf = '⭕️';
     } else if (processedAnswer.replace(/\(.*?\)|（.*?）/g, '').replace(/^の|^を|^と|^が|^に/, '') === userProccessedAnswer) {

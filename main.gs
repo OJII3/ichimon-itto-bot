@@ -39,15 +39,19 @@ const doPost = e => {
     if (event.type === "message") {
       Umsg = event.message.text || "#no_text";
       messageEvent();
+      return;
     } else if (event.type === "postback") {
       Umsg = event.postback.data || "#no_text";
       messageEvent();
+      return;
     } else if (event.type.match(/^follow$|^join$/)) {
       setMenuMessage();
       setTextMessage("メニューから選んでタップして下さい。");
       sendReplyMessage();
+      return;
     } else if (event.type.match(/^unfollow$|^leave$/)) {
       deleteUserFile(Uid);
+      return;
     }
   } catch(error) {
     setTextMessage("エラーが発生しました。\n\n" + error );
