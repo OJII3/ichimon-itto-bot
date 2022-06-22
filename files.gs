@@ -42,6 +42,8 @@ const upload = ssId => {
   setQaFileNames(ssId, sheetNames);
 };
 
+const pp = () => P.setProperty('MAIN_SSID', '1OU1FSJYrw6M_5_cJmvE6ePOTkKpEHW5Ix2bkUG_5T4o');
+
 const uploadSSIDS = () => {
   const ss_id = "1OU1FSJYrw6M_5_cJmvE6ePOTkKpEHW5Ix2bkUG_5T4o";
   const sheet_of_sheetsList = SpreadsheetApp.openById(ss_id).getSheetByName("sheetList");
@@ -168,4 +170,11 @@ const resetRankingScore = () => {
     setUserFile(userId, userFile);
   }
 };
+
+const writeErrorLog = (error) => {
+  const ssId = P.getProperty('MAIN_SSID');
+  const worksheet = SpreadsheetApp.openById(ssId).getSheetByName('ErrorLog');
+  worksheet.appendRow([new Date(), ''+error])
+  return;
+}
 

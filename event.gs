@@ -87,11 +87,11 @@ const messageEvent = () => {
     let currentIndex = 3;
     currentIndex = Umsg.match(/^@File/) ? 2 : Ufile.currentIndex;
     if(Umsg.match(/^[^@]|^@Pass$/)){
-      An = ""+QaFile[currentIndex][4];
-      Aa1 = ""+QaFile[currentIndex][5];
-      Aa2 = ""+QaFile[currentIndex][6];
-      Ae = ""+QaFile[currentIndex][7];
-      At = QaFile[currentIndex][8] ? "@Tips: "+QaFile[currentIndex][0] : false;
+      An = "" + QaFile[currentIndex][4];
+      Aa1 = "" + QaFile[currentIndex][5];
+      Aa2 = "" + QaFile[currentIndex][6];
+      Ae = "" + QaFile[currentIndex][7];
+      At = QaFile[currentIndex][8] ? `@Tips: ${+QaFile[currentIndex][0]}` : false;
       Tf = checkTf(currentIndex, userIndex);
       setAnswerMessage();
     }else if(Umsg.match(/^@File|^@Back$/)){
@@ -108,10 +108,10 @@ const messageEvent = () => {
       setTipsMessage("toggleCheck");
     }
     const nextIndex = getNextIndex(currentIndex, userIndex);
-    Qn = ""+QaFile[nextIndex][0];
-    Qo =   +QaFile[nextIndex][1];
-    Qi = ""+QaFile[nextIndex][2];
-    Qu = ""+QaFile[nextIndex][3];
+    Qn = "" + QaFile[nextIndex][0];
+    Qo = + QaFile[nextIndex][1];
+    Qi = "" + QaFile[nextIndex][2];
+    Qu = "" + QaFile[nextIndex][3];
     setQuestionMessage();
     sendReplyMessage();
     Ufile.currentQaFile = qaFileName;
@@ -129,7 +129,9 @@ const checkTf = (currentIndex, userIndex) => {
   const answers = [
     An.replace(/\{|\} ?\[.*?\]/g, ''),
     An.replace(/\{.*?\} ?\[|\]/g, ''),
-    ...(Aa1.match(/^.*?\/|\/.*?\/|\/.*?$|^.*$/g, '') || ['@Pass']).map(elem => elem.replace(/^\/|\/$/g, ''))
+    (Aa1 || '@@Pass'),
+    ...((Aa1.match(/.+?\//g) || ['@@Pass']).map(elem => elem.replace(/\//g, ''))),
+    ...((Aa1.match(/.+\/.+?$/g) || ['@@Pass']).map(elem => elem.replace(/.+\//g, '')))
   ];
   
   for (const answer of answers) {
@@ -155,15 +157,17 @@ const checkTf = (currentIndex, userIndex) => {
         .replace(/₄/g,"4")
         .replace(/₅/g,"5")
         .replace(/₆/g,"6")
-        .replace(/^の|^を|^と|^が|^に/, '');
+        .replace(/^[のをとがに]/, '');
       
-    if (processedAnswer.replace(/\(|\)/g, '').replace(/^の|^を|^と|^が|^に/, '') === userProccessedAnswer) {
+    if (processedAnswer.replace(/\(|\)/g, '').replace(/^[のをとがに]/, '') === userProccessedAnswer) {
       Tf = '⭕️';
-    } else if (processedAnswer.replace(/\(.*?\)|（.*?）/g, '').replace(/^の|^を|^と|^が|^に/, '') === userProccessedAnswer) {
+      break;
+    } else if (processedAnswer.replace(/\(.*?\)|（.*?）/g, '').replace(/^[のをとがに]/, '') === userProccessedAnswer) {
       Tf = '⭕️';
+      break;
     }
   }
-
+  
   if(Tf === "⭕️") {
     QaFile[currentIndex][userIndex] = "t";
     Ufile.score += 1;
@@ -183,7 +187,7 @@ const getTfCount = userIndex => {
 
 const getTips = () => {
   for (let i = 3; i < QaFile.length; i++) {
-    if ((''+QaFile[i][0]) === (''+Qn)) {
+    if (('' + QaFile[i][0]) === ('' + Qn)) {
       At = "" + QaFile[i][8];
       return At;
     }
@@ -193,7 +197,7 @@ const getTips = () => {
 
 const toggleTf = userIndex => {
   for (let i = 3; i < QaFile.length; i++) {
-    if (QaFile[i][0] === Qn) {
+    if (("" + QaFile[i][0]) === ("" + Qn)) {
       Tf = "" + QaFile[i][userIndex] === "t" ? "f" : "t";
       QaFile[i][userIndex] = Tf;
       const check = Tf === "t" ? "⭕️" : "❌";

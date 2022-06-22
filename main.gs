@@ -30,18 +30,18 @@ const SSIDS = JSON.parse(P.getProperty("SSIDS"));
 
 const doPost = e => {
   const event = JSON.parse(e.postData.contents).events[0];
-  REPLY_TOKEN = event.replyToken || "no_replyToken"
+  REPLY_TOKEN = event.replyToken ?? "no_replyToken"
   try {
     const s = event.source;
     const st = s.type;
     Uid = st === "group" ? s.groupId : st === "room" ? s.roomId : s.userId;
     Ufile = getUserFile(Uid);
     if (event.type === "message") {
-      Umsg = event.message.text || "#no_text";
+      Umsg = event.message.image ? "@Back" : event.message.text || "@Pass";
       messageEvent();
       return;
     } else if (event.type === "postback") {
-      Umsg = event.postback.data || "#no_text";
+      Umsg = event.postback?.data ?? "#no_text";
       messageEvent();
       return;
     } else if (event.type.match(/^follow$|^join$/)) {
@@ -54,9 +54,18 @@ const doPost = e => {
       return;
     }
   } catch(error) {
-    setTextMessage("エラーが発生しました。\n\n" + error );
-    setTextMessage("一旦ブロックすることで直る可能性があります。それでも直らない場合はご連絡ください\nhttps://lin.ee/p1l9oXU");
-    sendReplyMessage();
+    writeErrorLog(error);
+    const messages = [
+      {
+        type: 'text',
+        text: '' + error
+      },
+      {
+        type: 'text',
+        text: 'ご不明な点がございましたら開発者までご連絡お願いします。'
+      }
+    ];
+    sendReplyMessage(messages);
   }
 };
 

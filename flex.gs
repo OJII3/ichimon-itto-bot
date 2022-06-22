@@ -1,7 +1,7 @@
 
 const bubbleSize = "mega";
 
-const searchBox = text => `https://www.google.com/search?q=${text.replace(/\s|　|\\n/g, "%20").replace(/≒|cf\./g, "")}`;
+const searchBox = text => `https://www.google.com/search?q=${Utilities.base64Encode(text.replace(/\s|　|\\n|(|)|[|]|-|/g, "%20").replace(/≒|cf\.|>|"|'|`/g, ""))}`;
 
 const messageAction = (text, label) => {
   const output = {
@@ -196,9 +196,8 @@ const setQuestionMessage = () => {
       wrap: true,
       color: FontColor1,
       action: {
-        type: "postback",
-        displayText: searchBox(Qu.replace(/\\n/g, "\n")),
-        data: "@Back"
+        type: "uri",
+        uri: ""+searchBox(Qu)
       }
     })
   }
@@ -252,14 +251,14 @@ const setAnswerMessage = () => {
       paddingAll: "xl",
       contents: [{
         type: "text",
-        text: `${Tf} ${An.replace(/\{|\}/g, "").replace(/\\n/g, "\n")}${Aa1.replace(/\{|\}/g, '').replace(/\\n/g, '\n')}`,
+        text: `${Tf} ${An.replace(/\{|\}/g, "").replace(/\\n/g, "\n")}${Aa1.replace(/\\n/g, '\n')}`,
         size: FontSize,
         color: "#ff0055",
         wrap: true,
-        action: {
-          type: "postback",
-          data: "@Back",
-          displayText: searchBox(An.replace(/\{|\}/g, ""))
+         action: {
+           type: "postback",
+           data: "@Back",
+           displayText: searchBox(An.replace(/\{|\}/g, "") +Aa1)
         }
       }]
     }
@@ -273,9 +272,9 @@ const setAnswerMessage = () => {
       wrap: true,
       color: FontColor1,
       action: {
-        type: "postback",
-        data: "@Back",
-        displayText: searchBox(Aa2)
+         type: "postback",
+         data: "@Back",
+         displayText: searchBox(Aa2)
       }
     });
   }
@@ -287,9 +286,9 @@ const setAnswerMessage = () => {
       wrap: true,
       color: FontColor1,
       action: {
-        type: "postback",
-        data: "@Back",
-        displayText: searchBox(Aa2)
+         type: "postback",
+         data: "@Back",
+         dislayText: searchBox(Ae)
       }
     });
   }
